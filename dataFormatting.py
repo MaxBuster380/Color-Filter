@@ -59,7 +59,7 @@ def getDuplicatesIndexes(array):
                 treated[j] = True
         res.append(newElement)
 
-    for i in range(lenArray-1):
+    for i in range(lenArray):
         if (not treated[i]): #Don't attempt to create a new entry if it was treated previously
             findDuplicates(i)
     return res
@@ -75,7 +75,8 @@ def replaceIndexByValue(indexes, values):
             indexes : Array of integers i, where 0 <= i < len(values)
             values : Array of any values
         OUT
-            Array of any values"""
+            Array of any values
+    """
 
     res = []
 
