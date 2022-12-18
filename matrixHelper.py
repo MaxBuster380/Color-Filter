@@ -144,7 +144,7 @@ def matrix_add(A,B):
             matrix_set(res,ln,cl,val)
     return res
 
-def matrix_multNum(M,a):
+def multNum(M,a):
     """Multiplies a given matrix by a given number
 
         Example :
@@ -175,9 +175,41 @@ def matrix_multNum(M,a):
     return res
 
 def matrix_getLine(M,line):
+    """Gets the line of a given matrix
+
+        Example :
+            M = 
+            |	1	3	|
+            |	0	2	|
+
+            matrix_getLine(M,2)  ->  [0,2]
+
+        IN
+            M : Matrix, source
+            line: Integer, line to get
+        OUT
+            List of integers, line found
+
+    """
     return M[line-1]
 
 def matrix_getColumn(M,column):
+    """Gets the column of a given matrix
+
+        Example :
+            M = 
+            |	1	3	|
+            |	0	2	|
+
+            matrix_getColumn(M,1)  ->  [1,0]
+
+        IN
+            M : Matrix, source
+            column: Integer, column to get
+        OUT
+            List of integers, column found
+    """
+
     lineCount = matrix_lineCount(M)
     columnCount = matrix_columnCount(M)
     res = [0 for i in range(lineCount)]
@@ -187,13 +219,26 @@ def matrix_getColumn(M,column):
     return res
 
 def multLineMatrices(A,B):
+    """Multiplies two lists as if they were line matrices
+
+        Example :
+        A = [1,2]
+        B = [3,7]
+        multLineMatrices(A,B)  ->  17
+
+        IN
+            A : List of numbers
+            B : List of numbers
+        OUT
+            Number, product
+    """
     res = 0
     lenA = len(A)
     for i in range(lenA):
         res = res + A[i] * B[i]
     return res
 
-def matrix_multMatrix(A,B):
+def multMatrix(A,B):
     """Multiplies two given matrices
 
         Example :
@@ -234,3 +279,66 @@ def matrix_multMatrix(A,B):
             
             matrix_set(res,ln,cl,val)
     return res
+
+def matrix_isMatrix(M):
+    """Tests if the given value is of matrix type
+
+        OUT
+            Boolean, if M is a matrix
+    """
+    #If the base type is a list
+    if (type(M) != list):
+        return False
+
+    #If the subtypes are lists
+    foundNotList = False
+    i = 0
+    lenM = len(M)
+    while (i<lenM and not foundNotList):
+        foundNotList = type(M[i]) != list
+        i += 1
+    if (foundNotList):
+        return False
+
+    #If all sublists are of the same size
+    foundDiffSize = False
+    i = 0
+    sizeFirst = len(M[0])
+    while (i<lenM and not foundDiffSize):
+        foundDiffSize = len(M[i]) != sizeFirst
+        i += 1
+    if (foundDiffSize):
+        return False
+
+    #If all sublists contain only numbers
+    foundNotNumber = False
+    i = 0
+    lenSubList = sizeFirst
+    while(i<lenM and not foundNotNumber):
+        j = 0
+        while(j<lenSubList and not foundNotNumber):
+            foundNotNumber = type(M[i][j]) != int and type(M[i][j]) != float
+            j += 1
+        i += 1
+    if (foundNotNumber):
+        return False
+    
+    #If it passed all tests, it is a matrix
+    return True
+
+def matrix_mult(A,B):
+    """Returns the product of A and B
+        Does a matrix multiplication if B is a matrix
+        Does a numerical multiplication if B is a number
+
+        IN
+            A : Matrix
+            B : Matrix OR Number
+        OUT
+            Matrix OR Number, B's type
+    """
+    if (type(B) == int or type(B) == float):
+        return multNum(A,B)
+    else:
+        return multMatrix(A,B)
+            
