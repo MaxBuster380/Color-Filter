@@ -2,9 +2,8 @@ def matrix_create(lines,columns):
     """Creates a matrix of given lines and given columns
 
         Example :
-            matrix_create(2,3)  ->  |	0	0	|
-                                    |	0	0	|
-                                    |	0	0	|
+            matrix_create(2,3)  ->  | 0	0 0 |
+                                    | 0	0 0 |
 
         IN
             lines : Integer, number of lines
@@ -18,8 +17,8 @@ def matrix_get(M,line,column):
     """Gets a value of the given matrix on the given coordinates
 
         Example :
-            M = |	1	4	|
-                |	3	2	|
+            M = | 1 4 |
+                | 3 2 |
             matrix_get(M,1,2)  ->  4
 
         IN
@@ -35,13 +34,13 @@ def matrix_set(M,line,column,val):
     """Sets a value of the given matrix on the given coordinates
 
         Example :
-            M = |	1	4	|
-                |	3	2	|
+            M = | 1 4 |
+                | 3 2 |
                 
             matrix_set(M,2,2,6)
             
-            M = |	1	4	|
-                |	3	6	|
+            M = | 1 4 |
+                | 3 6 |
 
         IN
             M : Matrix, source of the output
@@ -55,9 +54,9 @@ def matrix_lineCount(M):
     """Gets the number of lines on the given matrix
 
         Example :
-            M = |	1	4	|
-                |	3	2	|
-                |	6	7	|
+            M = | 1 4 |
+                | 3 2 |
+                | 6 7 |
                 
             matrix_lineCount(M)  ->  3
 
@@ -72,9 +71,9 @@ def matrix_columnCount(M):
     """Gets the number of columns on the given matrix
 
         Example :
-            M = |	1	4	|
-                |	3	2	|
-                |	6	7	|
+            M = | 1 4 |
+                | 3 2 |
+                | 6 7 |
                 
             matrix_lineCount(M)  ->  2
 
@@ -90,9 +89,9 @@ def matrix_print(M):
 
         Example :
             matrix_print(M)
-            M = |	1	4	|
-                |	3	2	|
-                |	6	7	|
+            M = | 1 4 |
+                | 3 2 |
+                | 6 7 |
 
         IN
             M : Matrix
@@ -112,15 +111,15 @@ def matrix_add(A,B):
 
         Example :
             A = 
-            |	1	0	|
-            |	0	2	|
+            | 1 0 |
+            | 0 2 |
             B = 
-            |	2	4	|
-            |	3	0	|
+            | 2 4 |
+            | 3 0 |
             S = matrix_add(A,B)
             S = 
-            |	3	4	|
-            |	3	2	|
+            | 3 4 |
+            | 3 2 |
 
         IN
             A : Matrix, same size as B
@@ -149,15 +148,15 @@ def multNum(M,a):
 
         Example :
             M = 
-            |	1	0	|
-            |	0	2	|
+            | 1 0 |
+            | 0 2 |
             a = 3
             
             P = matrix_multNum(M,a)
             
             P = 
-            |	3	0	|
-            |	0	6	|
+            | 3 0 |
+            | 0 6 |
 
         IN
             M : Matrix
@@ -179,8 +178,8 @@ def matrix_getLine(M,line):
 
         Example :
             M = 
-            |	1	3	|
-            |	0	2	|
+            | 1 3 |
+            | 0 2 |
 
             matrix_getLine(M,2)  ->  [0,2]
 
@@ -198,8 +197,8 @@ def matrix_getColumn(M,column):
 
         Example :
             M = 
-            |	1	3	|
-            |	0	2	|
+            | 1	3 |
+            | 0	2 |
 
             matrix_getColumn(M,1)  ->  [1,0]
 
@@ -243,17 +242,17 @@ def multMatrix(A,B):
 
         Example :
             A = 
-            |	1	0	|
-            |	0	2	|
+            | 1	0 |
+            | 0	2 |
             B = 
-            |	0	2	|
-            |	2	0	|
+            | 0	2 |
+            | 2	0 |
             
             P = matrix_multMatrix(A,B)
             
             P = 
-            |	0	2	|
-            |	4	0	|
+            | 0 2 |
+            | 4 0 |
 
         IN
             A : Matrix
@@ -341,4 +340,63 @@ def matrix_mult(A,B):
         return multNum(A,B)
     else:
         return multMatrix(A,B)
-            
+
+def matrix_identity(n):
+    """Returns the identity matrix of size n,n
+
+        Example :
+                                    | 1 0 0 |
+            matrix_identity(3)  ->  | 0 1 0 |
+                                    | 0 0 1 |
+
+        IN
+            n : Integer, size of the matrix
+        OUT
+            Matrix, identity matrix of size n,n
+    """
+    res = matrix_create(n,n)
+    for i in range(1,n+1):
+        matrix_set(res,i,i,1)
+    return res
+
+def gP_addLine(size,a,b,n):
+    """L(a) = L(a) + n*L(b)
+        on square matrix of given size"""
+    res = matrix_identity(size)
+    matrix_set(res,a,b,n)
+    return res
+
+def gP_multLine(size,a,n):
+    """L(a) = n*L(a)
+        on square matrix of given size"""
+    res = matrix_identity(size)
+    matrix_set(res,a,a,n)
+    return res
+
+def gP_swapLines(size,a,b):
+    """L(a) <-> L(b)
+        on square matrix of given size"""
+    res = matrix_identity(size)
+    matrix_set(res,a,b,1)
+    matrix_set(res,b,a,1)
+    matrix_set(res,a,a,0)
+    matrix_set(res,b,b,0)
+    return res
+
+def gP_treatLine(M,n):
+    """Treats the line n of the matrix M in the Gauss Pivot Algorithm
+    """
+    
+
+def matrix_gaussPivot(M):
+    """Returns the matrix P so that PM is a superior triangular matrix
+
+        Example :
+
+
+        IN
+            M : Matrix, square matrix
+        OUT
+            Matrix : P
+    """
+    
