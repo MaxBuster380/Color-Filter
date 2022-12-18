@@ -99,9 +99,9 @@ def matrix_print(M):
     """
     lineCount = matrix_lineCount(M)
     columnCount = matrix_columnCount(M)
-    for cl in range(1,columnCount+1):
+    for ln in range(1,lineCount+1):
         line = "|\t"
-        for ln in range(1,lineCount+1):
+        for cl in range(1,columnCount+1):
             number = str(matrix_get(M,ln,cl))[0:6]
             line = line + number + "\t"
         line = line + "|"
@@ -174,6 +174,25 @@ def matrix_multNum(M,a):
             matrix_set(res,ln,cl,val)
     return res
 
+def matrix_getLine(M,line):
+    return M[line-1]
+
+def matrix_getColumn(M,column):
+    lineCount = matrix_lineCount(M)
+    columnCount = matrix_columnCount(M)
+    res = [0 for i in range(lineCount)]
+    for i in range(1,lineCount+1):
+        val = matrix_get(M,i,column)
+        res[i-1] = val
+    return res
+
+def multLineMatrices(A,B):
+    res = 0
+    lenA = len(A)
+    for i in range(lenA):
+        res = res + A[i] * B[i]
+    return res
+
 def matrix_multMatrix(A,B):
     """Multiplies two given matrices
 
@@ -197,3 +216,21 @@ def matrix_multMatrix(A,B):
         OUT
             Matrix, product of A and B
     """
+    A_columnCount = matrix_columnCount(A)
+    B_lineCount = matrix_lineCount(B)
+
+    if (A_columnCount != B_lineCount):
+        return 0
+    
+    A_lineCount = matrix_lineCount(A)
+    B_columnCount = matrix_columnCount(B)
+    
+    res = matrix_create(A_lineCount, B_columnCount)
+    for ln in range(1,A_lineCount+1):
+        for cl in range(1,B_columnCount+1):
+            aLine = matrix_getLine(A,ln)
+            bColumn = matrix_getColumn(B,cl)
+            val = multLineMatrices(aLine, bColumn)
+            
+            matrix_set(res,ln,cl,val)
+    return res
