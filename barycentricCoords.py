@@ -44,9 +44,13 @@ def getBarycentricCoordinates(tetrahedron, point):
     """Returns the barycentric coordinates of a given point on a given tetrahedron
 
         Example :
+            t = [(1,0,0),(0,1,0),(0,0,0),(0,0,1)]
+            point = (0.5, 0.5, 0)
+            getBarycentricCoordinates(t, point)  ->  [0.5, 0.5, 0, 0]
 
         IN
-
+            tetrahedron, Array of 4 tuples of 3 numbers
+            point, Tuple of 3 numbers
         OUT
             Array of numbers, influence of each tetrahedron vertice
     """
@@ -64,3 +68,21 @@ def getBarycentricCoordinates(tetrahedron, point):
 
         res.append(influence)
     return res
+
+def isPointInsideTetrahedron(tetrahedron, point):
+    """Returns true if the given point is inside the given tetrahedron
+
+        Example :
+            t = [(1,0,0),(0,1,0),(0,0,0),(0,0,1)]
+            point = (0.25, 0.25, 0.25)
+
+            isPointInsideTetrahedron(t, point)  ->  True
+
+        IN
+            tetrahedron, Array of 4 tuples of 3 numbers
+            point, Tuple of 3 numbers
+        OUT
+            Boolean
+    """
+    coords = getBarycentricCoordinates(tetrahedron, point)
+    return (coords[0] + coords[1] + coords[2] + coords[3]) == 1
