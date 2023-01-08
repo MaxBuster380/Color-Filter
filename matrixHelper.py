@@ -359,44 +359,72 @@ def matrix_identity(n):
         matrix_set(res,i,i,1)
     return res
 
-def gP_addLine(size,a,b,n):
-    """L(a) = L(a) + n*L(b)
-        on square matrix of given size"""
-    res = matrix_identity(size)
-    matrix_set(res,a,b,n)
-    return res
-
-def gP_multLine(size,a,n):
-    """L(a) = n*L(a)
-        on square matrix of given size"""
-    res = matrix_identity(size)
-    matrix_set(res,a,a,n)
-    return res
-
-def gP_swapLines(size,a,b):
-    """L(a) <-> L(b)
-        on square matrix of given size"""
-    res = matrix_identity(size)
-    matrix_set(res,a,b,1)
-    matrix_set(res,b,a,1)
-    matrix_set(res,a,a,0)
-    matrix_set(res,b,b,0)
-    return res
-
-def gP_treatLine(M,n):
-    """Treats the line n of the matrix M in the Gauss Pivot Algorithm
-    """
-    
-
-def matrix_gaussPivot(M):
-    """Returns the matrix P so that PM is a superior triangular matrix
+def matrix_getSubMatrix(M,lineBase):
+    """Returns the submatrix required for determinant calculation
 
         Example :
+                |	1	2	3	|
+            M = |	4	5	6	|
+                |	7	8	9	|
 
-
+            matrix_getSubMatrix(M,2)  ->  |	2	3	|
+                                          |	8	9	|
+            
         IN
-            M : Matrix, square matrix
+            M, square matrix
+            lineBase, integer, line of the submatrix
         OUT
-            Matrix : P
+            Matrix, sub matrix, square matrix
+
     """
-    
+    linesM = matrix_lineCount(M)
+    linesRes = linesM - 1
+    res = matrix_create(linesRes,linesRes)
+
+    correctLine = 1
+    for line in range(1,linesM+1):
+        if (line != lineBase):
+            for column in range(2,linesM+1):
+                val = matrix_get(M,line,column)
+                matrix_set(res,correctLine,column-1,val)
+            
+            correctLine += 1
+    return res
+
+def matrix_det(M):
+    """Returns the determinant of the given square matrix
+
+        Example :
+                |	1	2	3	|
+            M = |	0	2	4	|
+                |	0	0	5	|
+
+            matrix_det(M)  ->  10
+            
+        IN
+            M, square matrix
+        OUT
+            Number, the determinant of M
+    """
+    lineCount = matrix_lineCount(M)
+    if (lineCount != matrix_columnCount(M)):
+        return None
+
+    if (lineCount == 2):
+        a = matrix_get(M,1,1)
+        b = matrix_get(M,1,2)
+        c = matrix_get(M,2,1)
+        d = matrix_get(M,2,2)
+
+        return a*d-b*c
+
+    res = 0
+    for line in range(1,lineCount+1):
+        value = matrix_get(M,line,1)
+        if (value != 0):
+            sign = (-1)**(line-1)
+            subMatrix = matrix_getSubMatrix(M, line)
+            subDet = matrix_det(subMatrix)
+            
+            res = res + sign * value * subDet
+    return res
